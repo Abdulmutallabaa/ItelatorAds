@@ -1,0 +1,75 @@
+.body {
+  background-color: bisque;
+}
+.logo {
+  height: 100px;
+  width: 130px;
+}
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 80px;
+  background: #0a0a0a;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+#navbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#navbar li {
+  list-style: none;
+  padding: 0 20px;
+  position: relative;
+}
+#navbar li a {
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f95700ff;
+  transition: 0.3s ease;
+}
+#navbar li a:hover,
+#navbar li a.active {
+  color: #00a4ccff;
+}
+
+#navbar li a.active::after,
+#navbar li a:hover::after {
+  content: "";
+  width: 30%;
+  height: 2px;
+  background: #f95700ff;
+  position: absolute;
+  bottom: -4px;
+  left: 20px;
+}
+
+.content {
+  display: flex;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.content h3 {
+  color: rgb(228, 80, 0);
+}
+.content img {
+  width: 3in;
+  border-radius: 20px;
+  margin-top: 1.4in;
+  margin-left: 2in;
+}
+.content .phone_number {
+  margin-top: 1.5in;
+  margin-left: 20px;
+}
+.content .fonts {
+  font-size: 30px;
+}
+.content .email {
+  margin-left: 20px;
+}
+.content .instagram {
+  margin-left: 20px;
+}

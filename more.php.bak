@@ -1,0 +1,93 @@
+<?php 
+session_start();
+error_reporting(0);
+include('connection.php');
+$cid=intval($_GET['cid']);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=, initial-scale=1.0" />
+    <title>Clothing</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body style="background-color: rgb(235, 201, 183)">
+    <section id="header">
+      <a href="index.html">
+        <img src="media/logo.png" class="logo" alt="Image not found"
+      /></a>
+      <!-- navigation bar -->
+      <div>
+        <ul id="navbar">
+          <li><a href="index.html">Home</a></li>
+          <li><a class="active" href="#adverts">Adverts</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a href="#">Contact us</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="featured-adverts">
+      <h1>Clothing</h1>
+      <div class="line" style="margin-left: 6in; width:0.8in;"></div>
+      <br />
+      
+     
+      <div class="content2">
+        <div class="content">
+         <?php 
+			
+					$dept_query=mysqli_query($conn,"select  * from advert where cat ='".$_GET['cid']."'");
+		while($dept_rows=mysqli_fetch_array($dept_query)){ 
+		$id=$dept_rows['id'];?>
+<div class="content" style="display:inline-block;">
+<img src="docs/<?php echo $dept_rows['compfile'];?>"class="img-responsive" style="width: 3in;">
+ <p><b>Product:</b> <?php echo $dept_rows['productname']; ?><br>
+  <p><b>Description:</b> <?php echo $dept_rows['descri']; ?><br>
+    
+      <b>Price:</b> <?php echo $dept_rows['price']; ?></p>   
+      <a href="details.php?cid=<?php echo $dept_rows['id']?>"><b>Contact the Seller</b></a>
+	  
+</div>
+ <?php
+		}
+	?>
+ 
+
+
+</section>
+<!-- Promo -->
+<section class="bonanza">
+  <br>
+ <h1 class="bnz">PROMO!!!</h1>
+ <div class="line"></div>
+ <br>
+ <div class="promo">
+ <a href="media/I-watch.png"><marquee behavior="alternate" scrollamount="7" direction="left">  <img src="media/I-watch.png" alt=""></marquee></a>
+   <div class="content3">
+   <h1>Apple watch <br>Series 3</h1>  
+   <h4 style="font-size: 25px; color: darkslategray;">30% OFF</h4>
+  <a href="phonehubb information.html"> <p style="font-size: 20px; color: firebrick;">Available At Phoneshubb</p></a>
+  </div>
+ </div>
+ <a href="#"><button class="btn2">Back to top &#8593</button></a>
+</section>
+<!-- Footer -->
+<section class="footer">
+  <br>
+  
+ <hr class="footer-line">
+ <br>
+ <h4 class="Reg_number">Abdulaziz Abdulmutallab <br>NAS/CSC/18/1452</h4>
+ 
+ 
+  
+</section>
+
+
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,177 @@
+<?php
+
+include('connection.php');
+  if(isset($_POST['submit'])){
+
+    $fullname = $_POST['fullname'];
+    $companyname = $_POST['companyname'];
+    $productname = $_POST['productname'];
+    $productdescription = $_POST['productdescription'];
+    $category = $_POST['category'];
+    $price = $_POST['price'];
+    $phonenumber = $_POST['phonenumber'];
+    $email = $_POST['email'];
+   $compfile=$_FILES["compfile"]["name"];
+move_uploaded_file($_FILES["compfile"]["tmp_name"],"docs/".$_FILES["compfile"]["name"]);
+$query=mysqli_query($conn,"insert into advert(fullname,company,productname,descri,price,cat,phone,email,compfile) values('$fullname','$companyname','$productname','$productdescription','$price','$category','$phonenumber','$email','$compfile')");
+if($query){
+    
+	echo'<script>window.alert("Submitted Successfully");window.location=("advert");</script>';
+     
+    }
+    else
+    {
+     
+	  echo'<script>window.alert("Failed to Submit");window.location=("advert.php");</script>';
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <title>Submit Advert</title>
+    <link rel="stylesheet" href="submit advert.css" />
+  </head>
+  <body>
+    <section id="header">
+      <a href="index.html">
+        <img src="media/logo.png" class="logo" alt="Image not found"
+      /></a>
+      <!-- navigation bar -->
+      <div>
+        <ul id="navbar">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#adverts">Adverts</a></li>
+          <li><a href="#">About us</a></li>
+          <li><a class="active" href="#">Contact us</a></li>
+        </ul>
+      </div>
+    </section>
+    <!-- Content -->
+    <section class="content">
+      <form action="#" method="POST" enctype="multipart/form-data">
+        <div class="form">
+          <div class="test">
+            <div class="welcome-note">
+              <h1>Welcome</h1>
+            </div>
+            <div class="php">
+            <h4>
+
+</h4>
+
+            </div>
+            <div class="form">
+              <div class="input_field">
+                <label for="">Full Name</label>
+                <input
+                  name="fullname"
+                  type="text"
+                  class="input"
+                  placeholder="Enter your Name"
+
+                  required
+                />
+              </div>
+              <div class="input_field">
+                <label for="">Company Name</label>
+                <input
+                  name="companyname"
+                  type="text"
+                  class="input"
+                  placeholder="Enter Company Name"
+
+                  required
+                />
+              </div>
+              <div class="input_field">
+                <label for="">Product Name</label>
+                <input
+                  name="productname"
+                  type="text"
+                  class="input"
+                  placeholder="Enter Product Name"
+
+                  required
+                />
+              </div>
+              <div class="input_field">
+                <label for="">Product Description</label>
+                <textarea
+                  name="productdescription"
+                  id=""
+                  cols="20"
+                  rows="2"
+                  placeholder="Product Description"
+
+                  required
+                ></textarea>
+              </div>
+              
+              <div class="input_field">
+                <label for="">Product Category</label>
+                <div class="custom_select">
+                  <select name="category">
+                    <option value="Not Selected">---Select---</option>
+                    <option value="gadget">Gadgets</option>
+                    <option value="car">Cars</option>
+                    <option value="furnitures">Furnitures</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="utensils">Kitchen Utensils</option>
+                    <option value="electronic">Others</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="input_field">
+                <label for="">Product Price</label>
+                <input name="price" type="text" class="input" placeholder="N" />
+              </div>
+              <div class="input_field">
+                <label for="">Phone Number</label>
+                <input
+                  name="phonenumber"
+                  type="text"
+                  class="input"
+                  placeholder="+234"
+
+                  required
+                />
+              </div>
+              <div class="input_field">
+                <label for="">Email Address</label>
+                <input
+                  name="email"
+                  type="text"
+                  class="input"
+                  placeholder="Enter your email "
+
+                  required
+                />
+              </div>
+			   <div class="input_field">
+                <label for="">Upload image</label>
+                <input
+                  name="compfile"
+                  type="file"
+                  class="input"
+                  placeholder="Enter your email "
+
+                  required
+                />
+              </div>
+            </div>
+            <div class="submit">
+              <input type="submit" value="submit" name="submit" />
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+  </body>
+</html>
+
