@@ -1,0 +1,182 @@
+<?php
+session_start();
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])==0)
+    {   
+header('location:index.php');
+}
+else{
+
+if(isset($_POST['submit']))
+{
+  $cat=$_POST['lab'];
+   $compfile=$_FILES["compfile"]["name"];
+move_uploaded_file($_FILES["compfile"]["tmp_name"],"docs/".$_FILES["compfile"]["name"]);
+$ret=mysqli_query($con,"insert into catego(catname,compfile) values('$cat','$compfile')");
+if($ret)
+{
+$_SESSION['msg']="Categoy Created Successfully !!";
+}
+else
+{
+  $_SESSION['msg']="Error : Categoy not created";
+}
+}
+if(isset($_GET['del']))
+      {
+              mysqli_query($con,"delete from catego where id = '".$_GET['id']."'");
+                  $_SESSION['delmsg']="Categoy deleted !!";
+      }
+?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Admin | Category</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+<?php include('includes/header.php');?>
+    <!-- LOGO HEADER END-->
+<?php if($_SESSION['alogin']!="")
+{
+ include('includes/menubar.php');
+}
+ ?>
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper">
+        <div class="container">
+              <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-head-line">Add Categoy  </h1>
+                    </div>
+                </div>
+
+                <div class="row" >
+                  <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                           Categoy
+                        </div>
+<font color="green" align="center"><?php echo htmlentities($_SESSION['msg']);?><?php echo htmlentities($_SESSION['msg']="");?></font>
+
+
+                        <div class="panel-body">
+                       <form name="session" method="post" enctype="multipart/form-data">
+   <div class="form-group">
+    <label for="session">Create Categoy </label>
+    <input type="text" class="form-control" id="lab" name="lab" placeholder="category" />
+  </div>
+  <div class="form-group">
+    <label for="session">Categoy image</label>
+    <input type="file" class="form-control" id="lab" name="compfile" placeholder="Lab" />
+  </div>
+ <button type="submit" name="submit" class="btn btn-default">Submit</button>
+</form>
+                            </div>
+                            </div>
+                    
+                  
+                </div>
+				<div class="row" >
+                <font color="red" align="center"><?php echo htmlentities($_SESSION['delmsg']);?><?php echo htmlentities($_SESSION['delmsg']="");?></font>
+                <div class="col-md-6">
+                    <!--    Bordered Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Manage Categoy
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive table-bordered">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>category Name</th>
+											<th>image</th>
+                                            <th>Action</th>
+											
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+<?php
+$sql=mysqli_query($con,"select * from catego");
+$cnt=1;
+while($row=mysqli_fetch_array($sql))
+{
+?>
+
+
+                                        <tr>
+                                            <td><?php echo $cnt;?></td>
+                                            <td><?php echo htmlentities($row['catname']);?></td>
+											<td><img src="docs/<?php echo $row['compfile'];?>"class="img-responsive" style="width:150px; height:100px;"></td>
+                                            
+                                            <td>
+  <a href="lab.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">
+                                            <button class="btn btn-danger">Delete</button>
+</a>
+                                            </td>
+											 <td align="center">
+                                   <a href="admin_asset.php?cid=<?php echo htmlentities($row['labname']);?>">
+<button type="button" class="btn btn-primary">View Details</button></a>
+                                   </td>
+                                        </tr>
+<?php 
+$cnt++;
+} ?>
+
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                     <!--  End  Bordered Table  -->
+                </div>
+				</div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+    <!-- CONTENT-WRAPPER SECTION END-->
+  <?php include('includes/footer.php');?>
+    <!-- FOOTER SECTION END-->
+    <!-- JAVASCRIPT AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+    <!-- CORE JQUERY SCRIPTS -->
+    <script src="assets/js/jquery-1.11.1.js"></script>
+    <!-- BOOTSTRAP SCRIPTS  -->
+    <script src="assets/js/bootstrap.js"></script>
+</body>
+</html>
+<script>
+$(document).ready(
+function(){
+	$("#search").keyup(function(){
+		var value = $(this).val();
+		$.ajax({
+			url:"fetch.php",
+			method:"POST",
+			data:{search:value},
+			dataType:"TEXT",
+			success:function(response){
+				$("#result").html(response);
+			} /* success */
+		}) /* ajax */
+	}); /* keyup */
+}); /* document */
+</script>
+<?php } ?>

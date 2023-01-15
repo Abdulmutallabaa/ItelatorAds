@@ -1,0 +1,31 @@
+<?php
+session_start();
+include('connection.php');
+if(isset($_GET['cid']) && $_GET['action']=='accept')
+{
+$userid=$_GET['cid'];
+$query=mysqli_query($con,"update advert set status='Approved' where id='".$_GET['id']."'");
+header('location:contct');
+}
+
+
+
+if(isset($_GET['cid']) && $_GET['action']=='cancel')
+{
+$userid=$_GET['cid'];
+$query=mysqli_query($con,"update advert set status='Cancel' where id='".$_GET['id']."'");
+header('location:contct');
+}
+
+
+ if(isset($_GET['pass']))
+      {
+        $password="Approved";
+        $newpass=md5($password);
+              mysqli_query($con,"update advert set status='Approved' where StudentRegno = '".$_GET['id']."'");
+                  $_SESSION['delmsg']="Password Reset. New Password is Test@123";
+      }
+
+
+
+?>

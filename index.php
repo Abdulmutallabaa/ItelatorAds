@@ -1,139 +1,87 @@
-<?php 
-include('connection.php');
+<?php
+session_start();
+error_reporting(0);
+include("includes/config.php");
+if(isset($_POST['submit']))
+{
+    $username=$_POST['username'];
+    $password=$_POST['password'];
+$query=mysqli_query($con,"SELECT * FROM admin WHERE username='$username' and password='$password'");
+$num=mysqli_fetch_array($query);
+if($num>0)
+{
+$extra="change-password.php";//
+$_SESSION['alogin']=$_POST['username'];
+$_SESSION['id']=$num['id'];
+$host=$_SERVER['HTTP_HOST'];
+$uri=rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
+header("location:http://$host$uri/$extra");
+exit();
+}
+else
+{
+$_SESSION['errmsg']="Invalid username or password";
+$extra="index.php";
+$host  = $_SERVER['HTTP_HOST'];
+$uri  = rtrim(dirname($_SERVER['PHP_SELF']),'/\\');
+header("location:http://$host$uri/$extra");
+exit();
+}
+}
 ?>
 
-
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Itelator Ads</title>
-    <link rel="stylesheet" href="index.css" />
-  </head>
-  <body>
-    <section id="header">
-      <a href="index.php">
-        <img src="media/logo.png" class="logo" alt="Image not found"
-      /></a>
-      <!-- navigation bar -->
-      <div>
-        <ul id="navbar">
-          <li><a class="active" href="index.html">Home</a></li>
-          <li><a href="#adverts">Adverts</a></li>
-          <li><a href="#">About us</a></li>
-          <li><a href="contct">Contact us</a></li>
-		  <li><a href="search">Verify Advert Status</a></li>
-        </ul>
-      </div>
-    </section>
-    <!-- homepage -->
-    <section class="homepage">
-      <h4>Welcome -To</h4>
-      <b>
-        <h1>ITELATOR</h1>
-        <h2>Ads</h2></b
-      >
-      <p>
-        Online marketing platform that advertises your products <br />
-        To reach your target Audience!!!
-      </p>
-      <a href="advert" > <button type="button">SUBMIT ADVERT&#8594</button></a>
-    </section>
-    <!-- Advert categories 
-    <section class="categories">
-      <br />
-      <br />
-      <h1 id="adverts">What Advert do you want to see?</h1>
-      <div class="line"></div>
-      <br>
-      <br>
-	   <div class="contents">
-	  <?php 	$dept_query=mysqli_query($conn,"select  * from catego");
-				while($dept_rows=mysqli_fetch_array($dept_query)){ 
-		$id=$dept_rows['id'];?>
-	 
-      <div class="categories-list">
-        <a href="more.php?cid=<?php echo $dept_rows['catname'];?>">
-          <div class="cat1">
-            
-			<img src="docs/<?php echo $dept_rows['compfile'];?>"class="img-responsive" style="width:1;">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-              <h1 style="margin-left: 25%;"><?php echo $dept_rows['catname'];?></h1> </a>
-          </div>
-      </div>
-	  <?php
-		}
-	?>
-   	
-      <br>
-   
-      <br>
-      </div>
-    </section>
-    -->
-    
-<!--Adverts -->
-<section class="featured-adverts">
-<h1 id="adverts">  Adverts</h1>
-<div class="line"></div>
-<br>
-<br>
-<div class="content1">
+    <title>Admin Login</title>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+	 <link href="assets/css/all-min.css" rel="stylesheet" />
+	  <link href="assets/css/fontawesome.min.css" rel="stylesheet" />
+    <link href="assets/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <?php include('includes/header.php');?>
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="page-head-line">Welcome to Admin Section </h4>
 
-<?php 
-			
-					$dept_query=mysqli_query($conn,"select  * from advert where status='Accepted' ");
-		while($dept_rows=mysqli_fetch_array($dept_query)){ 
-		$id=$dept_rows['id'];?>
-<div style="display:inline-block; align-items:center; justify-content: center;">
-<img src="docs/<?php echo $dept_rows['compfile'];?>"class="img-responsive" style="width: 3in;">
- <p><b>Product:</b> <?php echo $dept_rows['productname']; ?><br>
-  <p><b>Description:</b> <?php echo $dept_rows['descri']; ?><br>
-    
-      <b>Price:</b> <?php echo $dept_rows['price']; ?></p>   
-      <a href="details.php?cid=<?php echo $dept_rows['id']?>"><b>Contact the Seller</b></a>
-      
-	  
-</div>
- <?php
-		}
-	?>
+                </div>
 
+            </div>
+             <span style="color:red;" ><?php echo htmlentities($_SESSION['errmsg']); ?><?php echo htmlentities($_SESSION['errmsg']="");?></span>
+            <form name="admin" method="post">
+            <div class="row">
+                <div class="col-md-6">
+                     <label>Enter Username : </label>
+                        <input type="text" name="username" class="form-control" required />
+                        <label>Enter Password :  </label>
+                        <input type="password" name="password" class="form-control" required />
+                        <hr />
+                        <button type="submit" name="submit" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Log Me In </button>&nbsp;
+                </div>
+                </form>
+                <div class="col-md-6">
+                    
+                                    </div>
 
-
-</section>
-<!-- Promo -->
-<section class="bonanza">
-  <br>
- <h1 class="bnz">PROMO!!!</h1>
- <div class="line"></div>
- <br>
- <div class="promo">
- <a href="media/I-watch.png"><marquee behavior="alternate" scrollamount="7" direction="left">  <img src="media/I-watch.png" alt=""></marquee></a>
-   <div class="content3">
-   <h1>Apple watch <br>Series 3</h1>  
-   <h4 style="font-size: 25px; color: darkslategray;">30% OFF</h4>
-  <a href="phonehubb information.html"> <p style="font-size: 20px; color: firebrick;">Available At Phoneshubb</p></a>
-  </div>
- </div>
- <a href="#"><button class="btn2">Back to top &#8593</button></a>
-</section>
-<!-- Footer -->
-<section class="footer">
-  <br>
-  
- <hr class="footer-line">
- <br>
- <h4 class="Reg_number">Abdulaziz Abdulmutallab <br>NAS/CSC/18/1452</h4>
- 
- 
-  
-</section>
-
-
-    <script src="index.js"></script>
-  </body>
+            </div>
+        </div>
+    </div>
+    <!-- CONTENT-WRAPPER SECTION END-->
+    <?php include('includes/footer.php');?>
+    <!-- FOOTER SECTION END-->
+    <!-- JAVASCRIPT AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
+    <!-- CORE JQUERY SCRIPTS -->
+    <script src="assets/js/jquery-1.11.1.js"></script>
+    <!-- BOOTSTRAP SCRIPTS  -->
+    <script src="assets/js/bootstrap.js"></script>
+</body>
 </html>

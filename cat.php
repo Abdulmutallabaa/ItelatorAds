@@ -9,43 +9,24 @@ else{
 
 if(isset($_POST['submit']))
 {
-	$email=$_POST['email'];
-	$password=$_POST['password'];
-  $firstname=$_POST['firstname'];
-   $lastname=$_POST['lastname'];
-    $gender=$_POST['gender'];
-	 $phone=$_POST['phone'];
-	  $labb=$_POST['la'];
-	 $vtx = substr($firstname, 0, 1);
-		$std = substr($lastname, 0, 3); 
-		
-		$stdid = $vtx .strtoupper($std) .rand(10, 99) .rand(10, 99);
-$ret=mysqli_query($con,"insert into employee(firstname,lastname,gender,phone,emp_id,lab_name,password) values('$firstname','$lastname','$gender','$phone','$stdid','$labb','$password','$email')");
+  $cat=$_POST['lab'];
+   $compfile=$_FILES["compfile"]["name"];
+move_uploaded_file($_FILES["compfile"]["tmp_name"],"docs/".$_FILES["compfile"]["name"]);
+$ret=mysqli_query($con,"insert into catego(catname,compfile) values('$cat','$compfile')");
 if($ret)
 {
-$_SESSION['msg']="Employee Created Successfully !!";
+$_SESSION['msg']="Categoy Created Successfully !!";
 }
 else
 {
-  $_SESSION['msg']="Error : Employee not created";
+  $_SESSION['msg']="Error : Categoy not created";
 }
 }
-if(isset($_GET['accept']))
+if(isset($_GET['del']))
       {
-              mysqli_query($con,"update advert set status='Accept'where id = '".$_GET['id']."'");
-                  $_SESSION['delmsg']="record update !!";
+              mysqli_query($con,"delete from catego where id = '".$_GET['id']."'");
+                  $_SESSION['delmsg']="Categoy deleted !!";
       }
-	  
-	  if(isset($_GET['cancel']))
-      {
-              mysqli_query($con,"update advert set status='Cancel' where id = '".$_GET['id']."'");
-                  $_SESSION['delmsg']="record update !!";
-      }
-	  
-	  
-	  
-	  
-	  
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +36,7 @@ if(isset($_GET['accept']))
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Admin | Session</title>
+    <title>Admin | Category</title>
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <link href="assets/css/font-awesome.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
@@ -74,16 +55,44 @@ if(isset($_GET['accept']))
         <div class="container">
               <div class="row">
                     <div class="col-md-12">
-                        <h1 class="page-head-line">ADVERT LIST  </h1>
+                        <h1 class="page-head-line">Add Categoy  </h1>
                     </div>
                 </div>
-                
+
+                <div class="row" >
+                  <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                           Categoy
+                        </div>
+<font color="green" align="center"><?php echo htmlentities($_SESSION['msg']);?><?php echo htmlentities($_SESSION['msg']="");?></font>
+
+
+                        <div class="panel-body">
+                       <form name="session" method="post" enctype="multipart/form-data">
+   <div class="form-group">
+    <label for="session">Create Categoy </label>
+    <input type="text" class="form-control" id="lab" name="lab" placeholder="category" />
+  </div>
+  <div class="form-group">
+    <label for="session">Categoy image</label>
+    <input type="file" class="form-control" id="lab" name="compfile" placeholder="Lab" />
+  </div>
+ <button type="submit" name="submit" class="btn btn-default">Submit</button>
+</form>
+                            </div>
+                            </div>
+                    
+                  
+                </div>
+				<div class="row" >
                 <font color="red" align="center"><?php echo htmlentities($_SESSION['delmsg']);?><?php echo htmlentities($_SESSION['delmsg']="");?></font>
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <!--    Bordered Table  -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Manage Advert
+                            Manage Categoy
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -92,24 +101,15 @@ if(isset($_GET['accept']))
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Fullname</th>
-                                            <th>Company</th>
-											<th>Items</th>
-											<th>Price</th>
-											<th>Description</th>
-											<th>Category</th>
-                                            <th>Phone number</th>
-											<th>Email</th>
-											<th>Status</th>
-											<th>Image</th>
-											<th>Action</th>
-											
+                                            <th>category Name</th>
+											<th>image</th>
+                                            <th>Action</th>
 											
                                         </tr>
                                     </thead>
                                     <tbody>
 <?php
-$sql=mysqli_query($con,"select * from advert");
+$sql=mysqli_query($con,"select * from catego");
 $cnt=1;
 while($row=mysqli_fetch_array($sql))
 {
@@ -118,27 +118,15 @@ while($row=mysqli_fetch_array($sql))
 
                                         <tr>
                                             <td><?php echo $cnt;?></td>
-                                            <td><?php echo htmlentities($row['fullname']);?></td>
-											 <td><?php echo htmlentities($row['company']);?></td>
-											  <td><?php echo htmlentities($row['productname']);?></td>
-											   <td><?php echo htmlentities($row['price']);?></td>
-											   <td><?php echo htmlentities($row['descri']);?></td>
-											    <td><?php echo htmlentities($row['cat']);?></td>
-                                            <td><?php echo htmlentities($row['phone']);?></td>
-											<td><?php echo htmlentities($row['email']);?></td>
-											<td><?php echo htmlentities($row['status']);?></td>
-											<td class="hidden-xs"><img src="../docs/<?php echo $row['compfile'];?>" alt="" width="100" height="100"></td>
-											
+                                            <td><?php echo htmlentities($row['catname']);?></td>
+											<td><img src="docs/<?php echo $row['compfile'];?>"class="img-responsive" style="width:150px; height:100px;"></td>
+                                            
                                             <td>
-  <a href="advert.php?id=<?php echo $row['id']?>&accept=accept" onClick="return confirm('Are you sure you want to Accept?')">
-                                            <button class="btn btn-success">Accept</button>
+  <a href="lab.php?id=<?php echo $row['id']?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">
+                                            <button class="btn btn-danger">Delete</button>
 </a>
-<a href="advert.php?id=<?php echo $row['id']?>&accept=cancel" onClick="return confirm('Are you sure you want to Accept?')">
-                                            <button class="btn btn-danger">Cancel</button>
-</a>
-
-
                                             </td>
+											
                                         </tr>
 <?php 
 $cnt++;
@@ -152,6 +140,7 @@ $cnt++;
                     </div>
                      <!--  End  Bordered Table  -->
                 </div>
+				</div>
             </div>
 
 
@@ -170,4 +159,21 @@ $cnt++;
     <script src="assets/js/bootstrap.js"></script>
 </body>
 </html>
+<script>
+$(document).ready(
+function(){
+	$("#search").keyup(function(){
+		var value = $(this).val();
+		$.ajax({
+			url:"fetch.php",
+			method:"POST",
+			data:{search:value},
+			dataType:"TEXT",
+			success:function(response){
+				$("#result").html(response);
+			} /* success */
+		}) /* ajax */
+	}); /* keyup */
+}); /* document */
+</script>
 <?php } ?>
